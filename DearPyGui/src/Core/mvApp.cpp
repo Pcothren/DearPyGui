@@ -689,7 +689,7 @@ namespace Marvel {
 
 		PyObject* pHandler = PyDict_GetItemString(PyModule_GetDict(PyImport_AddModule("__main__")), name.c_str()); // borrowed
 
-		#ifdef MV_DIST_ONLY
+		#ifdef MVDIST_ONLY
         #else
 		if (pHandler == NULL)
 		{
@@ -800,7 +800,7 @@ namespace Marvel {
 		mvGlobalIntepreterLock gil;
 
 		PyObject* pHandler = PyDict_GetItemString(PyModule_GetDict(PyImport_AddModule("__main__")), name.c_str()); // borrowed
-        #ifdef MV_DIST_ONLY
+        #ifdef MVDIST_ONLY
         #else
 		if (pHandler == NULL)
 		{

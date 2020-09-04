@@ -688,6 +688,9 @@ namespace Marvel {
 		mvGlobalIntepreterLock gil;
 
 		PyObject* pHandler = PyDict_GetItemString(PyModule_GetDict(PyImport_AddModule("__main__")), name.c_str()); // borrowed
+
+		#ifdef MV_DIST_ONLY
+        #else
 		if (pHandler == NULL)
 		{
 			PyObject* pModules = PyDict_Values(PyImport_GetModuleDict());
@@ -707,11 +710,12 @@ namespace Marvel {
 			Py_XDECREF(pModules);
 			Py_XDECREF(pModulesKeys);
 		}
+        #endif
 
 		// if callback doesn't exist
 		if (pHandler == NULL)
 		{
-			std::string message(" Callback doesn't exist");
+			std::string message(" Callback doesn't exist. Make sure you import it!");
 			ThrowPythonException(name + message);
 			
 			return;
@@ -796,6 +800,8 @@ namespace Marvel {
 		mvGlobalIntepreterLock gil;
 
 		PyObject* pHandler = PyDict_GetItemString(PyModule_GetDict(PyImport_AddModule("__main__")), name.c_str()); // borrowed
+        #ifdef MV_DIST_ONLY
+        #else
 		if (pHandler == NULL)
 		{
 			PyObject* pModules = PyDict_Values(PyImport_GetModuleDict());
@@ -814,11 +820,12 @@ namespace Marvel {
 			Py_XDECREF(pModules);
 			Py_XDECREF(pModulesKeys);
 		}
+        #endif
 
 		// if callback doesn't exist
 		if (pHandler == NULL)
 		{
-			std::string message(" Callback doesn't exist");
+			std::string message(" Callback doesn't exist. Make sure you import it!");
 			ThrowPythonException(name + message);
 			return;
 		}

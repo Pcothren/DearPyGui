@@ -43,6 +43,7 @@ build_script:
   - cmd: cd cmake-build-Release
   - cmd: cmake .. -G "%GENERATOR%" -A "%ARCH%" -DMVDIST_ONLY=True -DMVPY_VERSION=%PYVER% -DMVDPG_VERSION=%APPVEYOR_BUILD_VERSION%
   - cmd: cd ..
+  - cmd: cmake --build cmake-build-release --config "%CONFIG%"
 
 on_success:
   

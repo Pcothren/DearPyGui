@@ -36,6 +36,7 @@ stack:
 build_script:
   
   # Windows
+  - cmd: git submodule update --init --recursive ./Dependencies/freetype
   - cmd: mkdir cmake-build-release
   - cmd: cd cmake-build-Release
   - cmd: cmake .. -G "%GENERATOR%" -A "%ARCH%" -DMVDIST_ONLY=True -DMVPY_VERSION=%PYVER% -DMVDPG_VERSION=%APPVEYOR_BUILD_VERSION%

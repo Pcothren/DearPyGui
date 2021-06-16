@@ -13,48 +13,6 @@ environment:
 
   git_token:
     secure: gQgtJwYFLPs5DTavpysYlG/8LDOgg2DXlK15eupG2epdngqyp7f3Av0/WnmudbO/
-
-  matrix:
-
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      GENERATOR: "Visual Studio 16 2019"
-      ARCH: "x64"
-      CONFIG: Release
-      PYVER: 39
-      PYLOC: "C:/Python39-x64/python.exe"
-      PYSTACK: "3.9"
-      PYFULLVERSION: "3.9.0"
-      PYDOCRUN: "true"
-
-matrix:
-  fast_finish: true
-
-stack:
-  python %PYSTACK%
-  
-# actual build
-build_script:
-  
-  # Windows
-  - cmd: git submodule update --init --recursive ./Dependencies/imgui
-  - cmd: git submodule update --init --recursive ./Dependencies/freetype
-  - cmd: git submodule update --init --recursive ./Dependencies/ImGuiFileDialog
-  - cmd: mkdir cmake-build-release
-  - cmd: cd cmake-build-Release
-  - cmd: cmake .. -G "%GENERATOR%" -A "%ARCH%" -DMVDIST_ONLY=True -DMVPY_VERSION=%PYVER% -DMVDPG_VERSION=%APPVEYOR_BUILD_VERSION%
-  - cmd: cd ..
-  - cmd: cmake --build cmake-build-release --config "%CONFIG%"
-
-on_success:
-  
-  - cd Distribution
-
-  # Windows
-  - cmd: call %PYLOC% -m pip install --upgrade pip
-  - cmd: call %PYLOC% BuildPythonWheel.py C:\projects\dearpygui\cmake-build-release\DearPyGui\Release\core.pyd "%APPVEYOR_BUILD_VERSION%"
-  - cmd: call %PYLOC% -m pip install twine
-  - cmd: call %PYLOC% -m pip install wheel
-  - cmd: call %PYLOC% -m setup bdist_wheel --plat-name win_amd64 --dist-dir C:/projects/dearpygui/dist
   
   #  # deploy test docs
   - ps: |
@@ -64,9 +22,11 @@ on_success:
         {
           cd ..
           cd ..
+          cd C:\projects
           git clone -b gh-pages --single-branch "https://github.com/Pcothren/dpg-test-py-docs"
+          cd dpg-test-py-docs
           Add-Content -Path "$HOME\.git-credentials" -Value "https://$($env:git_token):x-oauth-basic@github.com`n" -NoNewline
-          C:\Python39-x64\python.exe -m pip install C:\projects\dearpygui\dist\dearpygui-$env:APPVEYOR_BUILD_VERSION-cp39-cp39-win_amd64.whl
+          C:\Python39-x64\python.exe -m pip install -i https://test.pypi.org/simple/ dearpygui
           C:\Python39-x64\python.exe -m pip install pdoc3
           C:\Python39-x64\python.exe -m pdoc --html dearpygui -f
           C:\Python39-x64\python.exe html_script.py

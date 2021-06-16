@@ -4,7 +4,7 @@ version: 0.6.{build}
 branches:
   only:
   - master
-build:
+build: Script
   verbosity: minimal
   
 # Do not build on tags

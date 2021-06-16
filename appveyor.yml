@@ -42,19 +42,17 @@ build_script:
       {
         if ( $env:PYDOCRUN -like "*true*" )
         {
-          cd ..
-          cd ..
+          git config --global credential.helper store
+          Add-Content -Path "$HOME\.git-credentials" -Value "https://$($env:git_token):x-oauth-basic@github.com`n" -NoNewline
+          git config --global user.email "prestoncothren@yahoo.com"
+          git config --global user.name "Preston Cothren"
           cd C:\projects
           git clone -b gh-pages --single-branch "https://github.com/Pcothren/dpg-test-py-docs"
           cd dpg-test-py-docs
-          Add-Content -Path "$HOME\.git-credentials" -Value "https://$($env:git_token):x-oauth-basic@github.com`n" -NoNewline
           C:\Python39-x64\python.exe -m pip install -i https://test.pypi.org/simple/ dearpygui
           C:\Python39-x64\python.exe -m pip install pdoc3
           C:\Python39-x64\python.exe -m pdoc --html dearpygui -f
           C:\Python39-x64\python.exe html_script.py
-          git config --global credential.helper store
-          git config --global user.email "prestoncothren@yahoo.com"
-          git config --global user.name "Preston Cothren"
           git commit -a -m "Update Docs for $env:APPVEYOR_BUILD_VERSION"
           git push origin gh-pages -q
         }

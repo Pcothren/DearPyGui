@@ -36,8 +36,6 @@ stack:
 # actual build
 build_script:
   
-on_success:
-  
   #  # deploy test docs
   - ps: |
       if ( $env:APPVEYOR_REPO_COMMIT_MESSAGE -like "*(test)*" )
